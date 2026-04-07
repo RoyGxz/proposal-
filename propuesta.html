@@ -1,0 +1,534 @@
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<title>Propuesta 💖</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Nunito:wght@300;400;700;800&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;}
+
+/* ── PANTALLAS ── */
+.screen{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .7s ease,transform .7s ease;
+}
+.screen.hidden{opacity:0;pointer-events:none;transform:scale(.94);}
+
+/* ══════════════ STAGE 1 ══════════════ */
+#s1{
+  background:radial-gradient(ellipse at 60% 40%, #ff6eb4 0%, #e040a0 30%, #9c27b0 65%, #4a0080 100%);
+}
+#s1-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+
+/* partículas brillantes */
+.spark{
+  position:absolute;border-radius:50%;
+  animation:sparkle var(--d,3s) var(--delay,0s) ease-in-out infinite;
+  opacity:0;
+}
+@keyframes sparkle{
+  0%,100%{opacity:0;transform:scale(.4);}
+  50%{opacity:var(--op,.8);transform:scale(1.2);}
+}
+
+.s1-inner{position:relative;z-index:2;text-align:center;padding:1.5rem 2rem;}
+
+.big-heart{
+  font-size:clamp(3.5rem,12vw,5.5rem);
+  display:block;margin-bottom:.6rem;
+  filter:drop-shadow(0 0 25px #ff4488) drop-shadow(0 0 55px #ff44aa);
+  animation:hb 1.3s ease-in-out infinite;
+}
+@keyframes hb{
+  0%,100%{transform:scale(1);}
+  14%{transform:scale(1.22);}
+  28%{transform:scale(1.05);}
+  42%{transform:scale(1.15);}
+}
+
+.q-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,7vw,4rem);
+  font-weight:700;color:#fff;
+  text-shadow:0 0 30px rgba(255,100,180,.9),0 2px 8px rgba(0,0,0,.4);
+  line-height:1.25;margin-bottom:2.8rem;
+  animation:fadeUp .8s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
+
+.btn{
+  padding:.8rem 2rem;border:none;border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:700;
+  cursor:pointer;letter-spacing:.04em;
+  transition:transform .18s,box-shadow .18s,opacity .18s;
+}
+#btn-yes{
+  background:linear-gradient(135deg,#ff4d88,#c2185b);
+  color:#fff;
+  box-shadow:0 0 28px rgba(255,77,136,.65),0 4px 15px rgba(0,0,0,.3);
+}
+#btn-yes:hover{transform:scale(1.1);box-shadow:0 0 50px rgba(255,77,136,.9);}
+#btn-yes:active{transform:scale(.96);}
+
+#btn-no{
+  background:linear-gradient(135deg,#ff4d88,#c2185b);
+  color:#fff;
+  box-shadow:0 0 20px rgba(255,77,136,.5);
+  position:fixed;
+  transition:left .38s cubic-bezier(.25,.8,.25,1),top .38s cubic-bezier(.25,.8,.25,1);
+  z-index:20;
+}
+
+/* ══════════════ STAGE 2 ══════════════ */
+#s2{
+  background:linear-gradient(135deg,#ff6ec7,#d81b8a,#7b1fa2);
+  background-size:300% 300%;
+  animation:gs 5s ease infinite;
+  overflow:hidden;
+}
+@keyframes gs{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+
+.s2-text{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,8vw,3.8rem);font-weight:700;
+  color:#fff;text-align:center;padding:0 1.5rem;line-height:1.3;
+  text-shadow:0 0 40px rgba(255,150,200,.8),0 2px 12px rgba(0,0,0,.4);
+  animation:fadeUp .9s ease both;
+  position:relative;z-index:2;margin-bottom:2.5rem;
+}
+
+#btn-gift{
+  background:rgba(255,255,255,.18);color:#fff;
+  border:2px solid rgba(255,255,255,.55);
+  backdrop-filter:blur(8px);
+  font-size:1.25rem;letter-spacing:.05em;
+  box-shadow:0 0 35px rgba(255,255,255,.2);
+  position:relative;z-index:2;
+  animation:fadeUp .9s .35s ease both;
+}
+#btn-gift:hover{background:rgba(255,255,255,.3);transform:scale(1.07);}
+
+/* corazones flotantes */
+.fh{
+  position:absolute;pointer-events:none;
+  animation:fhUp linear infinite;opacity:0;z-index:1;
+}
+@keyframes fhUp{
+  0%{transform:translateY(110vh) rotate(-12deg) scale(.6);opacity:0;}
+  8%{opacity:1;}
+  92%{opacity:.7;}
+  100%{transform:translateY(-12vh) rotate(12deg) scale(1.1);opacity:0;}
+}
+
+/* ══════════════ STAGE 3 — UNIVERSO ══════════════ */
+#s3{
+  background:radial-gradient(ellipse at 40% 45%, #1a3a6e 0%, #0d1f4a 25%, #07102e 55%, #020818 100%);
+  cursor:grab;overflow:hidden;
+}
+#s3:active{cursor:grabbing;}
+#uCanvas{position:fixed;inset:0;display:block;}
+.u-hint{
+  position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%);
+  font-family:'Nunito',sans-serif;font-size:.82rem;letter-spacing:.1em;
+  color:rgba(255,255,255,.38);pointer-events:none;z-index:5;
+  animation:fadeUp 1s .6s ease both,ph 3s 2.5s ease-in-out infinite;
+}
+@keyframes ph{0%,100%{opacity:.38;}50%{opacity:.75;}}
+
+/* ── Flash de transición ── */
+#ov{
+  position:fixed;inset:0;opacity:0;pointer-events:none;z-index:200;
+  background:radial-gradient(circle,#ffaadd 0%,transparent 70%);
+  transition:opacity .4s;
+}
+</style>
+</head>
+<body>
+
+<div id="ov"></div>
+<canvas id="bgCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></canvas>
+
+<!-- ════ STAGE 1 ════ -->
+<section id="s1" class="screen">
+  <div id="s1-bg"></div>
+  <div class="s1-inner">
+    <span class="big-heart">💖</span>
+    <h1 class="q-title">¿Quieres ser<br>mi novi@?</h1>
+    <button class="btn" id="btn-yes">Sí &nbsp;❤️</button>
+  </div>
+  <button class="btn" id="btn-no">No &nbsp;💔</button>
+</section>
+
+<!-- ════ STAGE 2 ════ -->
+<section id="s2" class="screen hidden">
+  <p class="s2-text">¡Sabía que<br>dirías que sí! 💝</p>
+  <button class="btn" id="btn-gift">🎁 &nbsp;Abre el regalo</button>
+</section>
+
+<!-- ════ STAGE 3 ════ -->
+<section id="s3" class="screen hidden">
+  <canvas id="uCanvas"></canvas>
+  <!--<p class="u-hint">✦ Arrastra para girar el universo ✦</p>-->
+</section>
+
+<script>
+/* ══════════════════════════════════════════
+   UTILIDADES
+══════════════════════════════════════════ */
+const $=id=>document.getElementById(id);
+const rand=(a,b)=>a+Math.random()*(b-a);
+const randInt=(a,b)=>Math.floor(rand(a,b+1));
+
+function vibe(p){if(navigator.vibrate)navigator.vibrate(p);}
+
+function flash(cb){
+  const ov=$('ov');
+  ov.style.opacity='.7';
+  setTimeout(()=>{ov.style.opacity='0';},420);
+  setTimeout(cb,320);
+}
+
+function go(from,to){
+  flash(()=>{
+    $(from).classList.add('hidden');
+    $(to).classList.remove('hidden');
+  });
+}
+
+/* ══════════════════════════════════════════
+   STAGE 1 — CHISPAS DE FONDO
+══════════════════════════════════════════ */
+(function initSparks(){
+  const bg=$('s1-bg');
+  const colors=['#ff9de2','#f48fb1','#ce93d8','#ffffff','#ffcdd2','#e040fb'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='spark';
+    const size=rand(3,10);
+    el.style.cssText=`
+      width:${size}px;height:${size}px;
+      left:${rand(0,100)}%;top:${rand(0,100)}%;
+      background:${colors[randInt(0,colors.length-1)]};
+      box-shadow:0 0 ${size*2}px ${colors[randInt(0,colors.length-1)]};
+      --d:${rand(2,6)}s;--delay:${rand(0,4)}s;--op:${rand(.4,.95)};
+    `;
+    bg.appendChild(el);
+  }
+})();
+
+/* ══════════════════════════════════════════
+   STAGE 1 — BOTÓN "NO" HUIDIZO
+══════════════════════════════════════════ */
+(function(){
+  const btn=$('btn-no');
+  function place(){
+    const bw=btn.offsetWidth||130,bh=btn.offsetHeight||46;
+    const m=24;
+    btn.style.left=rand(m,window.innerWidth -bw-m)+'px';
+    btn.style.top =rand(m,window.innerHeight-bh-m)+'px';
+  }
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    btn.style.left=(window.innerWidth/2+80)+'px';
+    btn.style.top =(window.innerHeight/2+20)+'px';
+  }));
+  btn.addEventListener('mouseover',()=>{place();vibe(25);});
+  btn.addEventListener('touchstart',e=>{e.preventDefault();place();vibe(25);},{passive:false});
+  btn.addEventListener('click',e=>{e.preventDefault();place();});
+  window.addEventListener('resize',place);
+})();
+
+/* ══════════════════════════════════════════
+   STAGE 1 → 2
+══════════════════════════════════════════ */
+$('btn-yes').addEventListener('click',()=>{
+  vibe([60,30,90]);
+  go('s1','s2');
+  spawnHearts();
+});
+
+/* ══════════════════════════════════════════
+   STAGE 2 — CORAZONES
+══════════════════════════════════════════ */
+function spawnHearts(){
+  const s=$('s2');
+  const em=['💖','💝','💗','💓','❤️','💕','✨','🌸','💫','🌹','💞'];
+  let n=0;
+  const iv=setInterval(()=>{
+    const el=document.createElement('span');
+    el.className='fh';
+    el.textContent=em[randInt(0,em.length-1)];
+    el.style.left=rand(0,95)+'vw';
+    const dur=rand(4,8);
+    el.style.animationDuration=dur+'s';
+    el.style.animationDelay=rand(0,1.2)+'s';
+    el.style.fontSize=rand(1.2,2.8)+'rem';
+    s.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+    if(++n>100)clearInterval(iv);
+  },150);
+}
+
+/* ══════════════════════════════════════════
+   STAGE 2 → 3
+══════════════════════════════════════════ */
+$('btn-gift').addEventListener('click',()=>{
+  vibe([50,40,80,40,100]);
+  go('s2','s3');
+  setTimeout(initUniverse,450);
+});
+
+/* ══════════════════════════════════════════
+   STAGE 3 — UNIVERSO PRO
+   Inspirado en las imágenes: palabras
+   dispersas POR TODA la pantalla + agujero
+   negro con resplandor naranja/rojo
+══════════════════════════════════════════ */
+function initUniverse(){
+  const canvas=$('uCanvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,stars=[];
+
+  /* Palabras con emojis — pantalla llena */
+  const rawWords=[
+    {t:'Mi amor',e:'❤️'},{t:'Mi mundo',e:'🌍'},{t:'Eres todo',e:'✨'},
+    {t:'Mi cielo',e:'👑'},{t:'Te amo',e:'💖'},{t:'Mi vida',e:'🔥'},
+    {t:'Siempre tú',e:'🔥'},{t:'Mi razón',e:'🎁'},{t:'Mi sueño',e:'👑'},
+    {t:'Contigo',e:'💙'},{t:'Brillas',e:'✨'},{t:'Universo',e:'🌍'},
+    {t:'Mi sol',e:'🌟'},{t:'Alegría',e:'🌈'},{t:'Amor eterno',e:'💝'},
+    {t:'Libertad',e:'💎'},{t:'Estrella',e:'💫'},{t:'Tu risa',e:'🌸'},
+    {t:'Mi luz',e:'⭐'},{t:'Siempre',e:'♾️'},{t:'Infinito',e:'💜'},
+    {t:'Mi alma',e:'🌹'},{t:'Tú y yo',e:'💞'},{t:'Mi todo',e:'🔥'},
+    {t:'Eres única',e:'🦋'},{t:'Mi magia',e:'🪄'},{t:'Contigo todo',e:'🌙'},
+    {t:'Mi galaxia',e:'🌌'},{t:'Eres mi paz',e:'🕊️'},{t:'Locura bonita',e:'🌺'},
+    {t:'Mi refugio',e:'🏡'},{t:'Eres mi calma',e:'🌊'},{t:'Despacio',e:'🌷'},
+    {t:'Mi destino',e:'🧭'},{t:'Solo tú',e:'💗'},{t:'Mi primavera',e:'🌸'},
+    {t:'Eres mi todo',e:'💫'},{t:'Contigo siempre',e:'🤍'},{t:'Mi corazón',e:'💓'},
+    {t:'Eres mi flor',e:'🌹'},{t:'Mi eternidad',e:'⏳'},{t:'Amor real',e:'💍'},
+    {t:'Tu sonrisa',e:'😍'},{t:'Eres perfecta',e:'✅'},{t:'Mi universo',e:'🪐'},
+    {t:'Juntos',e:'👫'},{t:'Para siempre',e:'🔗'},{t:'Mi princesa',e:'👸'},
+    {t:'Eres mi luna',e:'🌙'},{t:'Mi tesoro',e:'💎'},{t:'Eres especial',e:'🌠'},
+    {t:'Amor puro',e:'🌊'},{t:'Mi melodía',e:'🎵'},{t:'Vivo por ti',e:'🕯️'},
+    {t:'Eres mi cielo',e:'☁️'},{t:'Mi adoración',e:'🙏'},{t:'Bella',e:'🌺'},
+  ];
+
+  /* Cada palabra tiene posición libre en la pantalla + deriva suave */
+  let words=[];
+
+  function buildWords(){
+    words=rawWords.map((w,i)=>{
+      const angle=rand(0,Math.PI*2);
+      /* Radio desde el centro — entre 90px y el borde de pantalla */
+      const minR=Math.min(W,H)*0.10;
+      const maxR=Math.min(W,H)*0.72;
+      const r=rand(minR,maxR);
+      return{
+        text:w.t, emoji:w.e,
+        /* coordenadas propias */
+        ox:W/2+Math.cos(angle)*r,
+        oy:H/2+Math.sin(angle)*r,
+        /* velocidad de deriva lenta e independiente */
+        vx:(Math.random()-.5)*0.28,
+        vy:(Math.random()-.5)*0.18,
+        /* rotación global */
+        baseAngle:angle,
+        orbitR:r,
+        orbitSpeed:(rand(.0008,.003))*(Math.random()<.5?1:-1),
+        curAngle:angle,
+        fontSize:rand(13,22),
+        color:['#ff9de2','#ffffff','#c084fc','#f9a8d4','#fda4af',
+               '#a5b4fc','#fdba74','#86efac','#ff6eb4'][randInt(0,8)],
+        alpha:rand(.75,1),
+        /* escala pulsante */
+        pulsePhase:rand(0,Math.PI*2),
+        pulseSpeed:rand(.012,.028),
+      };
+    });
+  }
+
+  /* Stars */
+  function initStars(){
+    stars=Array.from({length:300},()=>({
+      x:rand(0,W),y:rand(0,H),
+      r:rand(.3,1.8),
+      alpha:rand(.2,.9),
+      phase:rand(0,Math.PI*2),
+      sp:rand(.006,.02),
+    }));
+  }
+
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+    initStars();
+    buildWords();
+    buildHoleGradients(W/2,H/2);
+    buildBgGrad();
+    setupCtx();
+  }
+
+  /* ── Drag / Touch ── */
+  let drag=false,lastX=0,velX=0;
+  let dragAngle=0;   /* rotacion acumulada del usuario */
+  let autoAngle=0;   /* auto-giro suave */
+  let momentum=0;
+
+  function pStart(x){drag=true;lastX=x;velX=0;}
+  function pMove(x){
+    if(!drag)return;
+    const dx=x-lastX;
+    velX=dx;
+    dragAngle+=dx*.013;
+    lastX=x;
+  }
+  function pEnd(){drag=false;momentum=velX*.7;}
+
+  canvas.addEventListener('mousedown',e=>pStart(e.clientX));
+  canvas.addEventListener('mousemove',e=>pMove(e.clientX));
+  canvas.addEventListener('mouseup',pEnd);
+  canvas.addEventListener('mouseleave',pEnd);
+  canvas.addEventListener('touchstart',e=>pStart(e.touches[0].clientX),{passive:true});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();pMove(e.touches[0].clientX);},{passive:false});
+  canvas.addEventListener('touchend',pEnd);
+
+  /* ── Gradientes del agujero negro — se crean UNA sola vez ── */
+  let holeGrad1,holeGrad2,holeGrad3,holeCore,holeRing;
+  /* longitudes fijas de rayos (sin rand en el loop) */
+  const rayLens=[160,110,200,140,180,120];
+  const rayWidths=[2,1.5,2.5,1.5,2,1.5];
+
+  function buildHoleGradients(cx,cy){
+    holeGrad1=ctx.createRadialGradient(cx,cy,13,cx,cy,260);
+    holeGrad1.addColorStop(0,'rgba(255,80,0,0)');
+    holeGrad1.addColorStop(.55,'rgba(255,60,0,.13)');
+    holeGrad1.addColorStop(1,'rgba(200,30,0,0)');
+
+    holeGrad2=ctx.createRadialGradient(cx,cy,10,cx,cy,190);
+    holeGrad2.addColorStop(0,'rgba(255,120,0,0)');
+    holeGrad2.addColorStop(.55,'rgba(255,80,0,.28)');
+    holeGrad2.addColorStop(1,'rgba(180,20,0,0)');
+
+    holeGrad3=ctx.createRadialGradient(cx,cy,7,cx,cy,130);
+    holeGrad3.addColorStop(0,'rgba(255,140,0,.02)');
+    holeGrad3.addColorStop(.55,'rgba(255,90,0,.45)');
+    holeGrad3.addColorStop(1,'rgba(160,0,0,0)');
+
+    holeRing=ctx.createRadialGradient(cx,cy,42,cx,cy,90);
+    holeRing.addColorStop(0,'rgba(255,120,0,0)');
+    holeRing.addColorStop(.45,'rgba(255,90,10,.55)');
+    holeRing.addColorStop(.7,'rgba(220,50,0,.4)');
+    holeRing.addColorStop(1,'rgba(180,20,0,0)');
+
+    holeCore=ctx.createRadialGradient(cx-6,cy-6,2,cx,cy,42);
+    holeCore.addColorStop(0,'#090005');
+    holeCore.addColorStop(.6,'#040008');
+    holeCore.addColorStop(1,'#000000');
+  }
+
+  function drawHole(cx,cy,angle){
+    ctx.beginPath();ctx.arc(cx,cy,260,0,Math.PI*2);ctx.fillStyle=holeGrad1;ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,190,0,Math.PI*2);ctx.fillStyle=holeGrad2;ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,130,0,Math.PI*2);ctx.fillStyle=holeGrad3;ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,90,0,Math.PI*2);ctx.fillStyle=holeRing;ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,42,0,Math.PI*2);ctx.fillStyle=holeCore;ctx.fill();
+
+    ctx.globalAlpha=.18;
+    ctx.strokeStyle='rgba(120,160,255,1)';
+    for(let i=0;i<6;i++){
+      const a=(i/6)*Math.PI*2+angle*.3;
+      const len=rayLens[i];
+      ctx.lineWidth=rayWidths[i];
+      ctx.beginPath();ctx.moveTo(cx,cy);
+      ctx.lineTo(cx+Math.cos(a)*len,cy+Math.sin(a)*len);
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+  }
+
+  /* ── Render loop ── */
+  let t=0;
+  /* Configurar canvas una vez — textAlign y textBaseline no cambian */
+  function setupCtx(){
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.shadowBlur=0; /* sin sombras por defecto */
+  }
+
+  /* Gradiente de fondo nebulosa — se crea una vez */
+  let bgGrad;
+  function buildBgGrad(){
+    bgGrad=ctx.createRadialGradient(W*.4,H*.45,0,W*.5,H*.5,Math.max(W,H)*.85);
+    bgGrad.addColorStop(0,'#1e4080');
+    bgGrad.addColorStop(0.25,'#0d2255');
+    bgGrad.addColorStop(0.55,'#070f2e');
+    bgGrad.addColorStop(1,'#020818');
+  }
+
+  function loop(){
+    /* Fondo azul nebulosa */
+    ctx.globalAlpha=1;
+    ctx.fillStyle=bgGrad;
+    ctx.fillRect(0,0,W,H);
+    t++;
+
+    /* momentum + auto-giro */
+    if(!drag&&Math.abs(momentum)>.05){
+      dragAngle+=momentum*.013;
+      momentum*=.88;
+    } else if(!drag){
+      autoAngle+=.0018;   /* giro suave automático */
+    }
+
+    /* ángulo total que se aplica al sistema */
+    const totalAngle=dragAngle+autoAngle;
+
+    const cx=W/2,cy=H/2;
+
+    /* ── Estrellas ── */
+    ctx.fillStyle='#fff';
+    for(const s of stars){
+      s.alpha=.2+.7*(0.5+0.5*Math.sin(s.phase+t*s.sp));
+      ctx.globalAlpha=s.alpha;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+    }
+    ctx.globalAlpha=1;
+
+    /* ── Palabras — totalAngle rota todo el sistema a la vez ── */
+    ctx.shadowBlur=0;
+    const maxD=Math.min(W,H)*.72;
+    for(const w of words){
+      w.curAngle+=w.orbitSpeed;           /* órbita propia, independiente */
+      const a=w.curAngle+totalAngle;      /* offset de rotación global */
+      const px=cx+Math.cos(a)*w.orbitR;
+      const py=cy+Math.sin(a)*w.orbitR*.5;
+
+      const dx=px-cx,dy=py-cy;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      const proximity=Math.max(0,1-dist/maxD);
+
+      const pulse=1+.035*Math.sin(w.pulsePhase+t*w.pulseSpeed);
+      const fs=Math.round(w.fontSize*(.65+.55*proximity)*pulse);
+
+      ctx.globalAlpha=w.alpha*(.4+.6*proximity);
+      ctx.font=`700 ${fs}px 'Nunito',sans-serif`;
+      ctx.fillStyle=w.color;
+      ctx.fillText(w.emoji+' '+w.text,px,py);
+    }
+    ctx.globalAlpha=1;
+
+    /* rayos también rotan con totalAngle */
+    drawHole(cx,cy,totalAngle);
+
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize',()=>{resize();});
+  resize();
+  loop();
+}
+</script>
+</body>
+</html>
